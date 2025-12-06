@@ -1,82 +1,120 @@
-# QR Code Generator & Tracking System
+# 🎯 QR Code Generator & Tracking System
 
-A complete MERN stack application for generating, managing, and tracking QR codes with real-time analytics.
+A complete **MERN stack** application for generating, managing, and tracking QR codes with **real-time analytics**. Perfect for businesses, marketers, and developers who need powerful QR code management with detailed insights.
 
-## Features
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
+![MongoDB](https://img.shields.io/badge/mongodb-%3E%3D4.0-green.svg)
 
-### QR Code Generator
-- ✅ Create QR codes with custom URLs
-- ✅ Edit/update destination URL anytime
-- ✅ Download QR code as PNG/SVG
-- ✅ Bulk QR code generation
+## 🌟 Live Demo
 
-### QR Code Management
-- ✅ View all generated QR codes in a table
-- ✅ Edit QR link without regenerating
-- ✅ Delete QR codes
-- ✅ Search & filter QR codes
-- ✅ Individual QR statistics
+**Repository:** [https://github.com/iakash07/qr-code-tracker](https://github.com/iakash07/qr-code-tracker)
 
-### Scan Tracking System
-- ✅ Real-time scan count updates
-- ✅ Track scan date/time
-- ✅ Track device type (mobile/desktop/tablet)
-- ✅ Track approximate location (IP-based)
-- ✅ WebSocket for live updates
+## ✨ Key Features
 
-### Dashboard
-- ✅ Total QR codes generated
-- ✅ Total scans across all QR codes
-- ✅ Daily/weekly/monthly scan charts
-- ✅ Most scanned QR codes
-- ✅ Recent activity feed
+### 🎨 QR Code Generator
+- ✅ Generate QR codes from any URL instantly
+- ✅ Custom titles and descriptions
+- ✅ Download as PNG/SVG
+- ✅ Edit destination URL without regenerating QR
+- ✅ Unique short URLs for each QR code
 
-## Tech Stack
+### 📊 Advanced Analytics Dashboard
+- ✅ **Real-time scan tracking** with WebSocket updates
+- ✅ Total scans, QR codes, and active codes
+- ✅ Daily/weekly/monthly scan trends
+- ✅ Device breakdown (mobile/tablet/desktop)
+- ✅ Geographic tracking (country & city)
+- ✅ Browser and OS detection
+- ✅ Most scanned QR codes ranking
 
-- **Frontend**: React.js, Chart.js, Socket.io-client
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Real-time**: Socket.io
-- **QR Generation**: qrcode library
+### 🔍 QR Code Management
+- ✅ View all QR codes in organized table
+- ✅ Search by title, URL, or short ID
+- ✅ Sort and filter options
+- ✅ Individual QR analytics
+- ✅ Edit, delete, activate/deactivate
+- ✅ Bulk operations support
 
-## Installation
+### 📈 Individual QR Analytics
+- ✅ Scan count and trends
+- ✅ Hourly distribution patterns
+- ✅ Device and browser breakdown
+- ✅ Top scanning locations
+- ✅ Time period filters (7d/30d/90d)
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React.js** - UI framework
+- **React Router** - Navigation
+- **Chart.js** - Data visualization
+- **Socket.io Client** - Real-time updates
+- **Axios** - HTTP client
+- **React Toastify** - Notifications
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **Socket.io** - WebSocket server
+- **QRCode** - QR generation library
+- **UAParser** - User agent parsing
+- **GeoIP-Lite** - IP geolocation
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14+)
+- Node.js v14 or higher
 - MongoDB (local or Atlas)
+- Git
 
-### Setup
+### Installation
 
-1. Clone the repository:
+1. **Clone the repository**
 ```bash
 git clone https://github.com/iakash07/qr-code-tracker.git
 cd qr-code-tracker
 ```
 
-2. Install dependencies:
+2. **Install dependencies**
 ```bash
-npm run install-all
+# Install server dependencies
+npm install
+
+# Install client dependencies
+cd client
+npm install
+cd ..
 ```
 
-3. Configure environment variables:
+3. **Configure environment**
 ```bash
 cp .env.example .env
-# Edit .env with your MongoDB URI
 ```
 
-4. Start MongoDB (if local):
+Edit `.env`:
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/qr-tracker
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+```
+
+4. **Start MongoDB**
 ```bash
 mongod
 ```
 
-5. Run the application:
+5. **Run the application**
 
-**Development mode:**
+**Development mode (recommended):**
 ```bash
 # Terminal 1 - Backend
 npm run server
 
-# Terminal 2 - Frontend
+# Terminal 2 - Frontend  
 npm run client
 ```
 
@@ -86,51 +124,165 @@ npm run build
 npm start
 ```
 
-## Usage
+6. **Access the app**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
 
-1. **Generate QR Code**: Enter a URL and click "Generate"
-2. **Download**: Click download button for PNG/SVG
-3. **Edit Link**: Click edit icon to change destination URL
-4. **Track Scans**: View real-time analytics on dashboard
-5. **Scan QR**: When scanned, redirects to URL and logs analytics
+## 📖 Documentation
 
-## API Endpoints
+- **[API Documentation](API.md)** - Complete API reference
+- **[Deployment Guide](DEPLOYMENT.md)** - Deploy to Heroku, Vercel, Railway, DigitalOcean
+- **[Features List](FEATURES.md)** - Detailed feature breakdown
 
-### QR Codes
-- `POST /api/qr/generate` - Generate new QR code
-- `GET /api/qr/all` - Get all QR codes
-- `GET /api/qr/:id` - Get specific QR code
-- `PUT /api/qr/:id` - Update QR code URL
-- `DELETE /api/qr/:id` - Delete QR code
+## 🎯 How It Works
 
-### Analytics
-- `GET /api/analytics/dashboard` - Dashboard stats
-- `GET /api/analytics/qr/:id` - QR-specific analytics
-- `POST /api/scan/:shortId` - Track scan (auto-called on QR scan)
+1. **Generate QR Code**
+   - Enter any URL
+   - Add optional title and description
+   - Get instant QR code with unique short URL
 
-## Project Structure
+2. **Share QR Code**
+   - Download as PNG
+   - Share short URL
+   - Print for physical use
+
+3. **Track Scans**
+   - When someone scans the QR code
+   - System logs device, location, time
+   - Redirects to destination URL
+   - Updates analytics in real-time
+
+4. **View Analytics**
+   - Dashboard shows overall stats
+   - Individual QR analytics available
+   - Filter by time periods
+   - Export data (coming soon)
+
+## 📁 Project Structure
 
 ```
 qr-code-tracker/
 ├── client/                 # React frontend
 │   ├── public/
 │   ├── src/
-│   │   ├── components/    # React components
+│   │   ├── components/    # Reusable components
 │   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   └── App.js
+│   │   ├── services/      # API & Socket services
+│   │   ├── App.js
+│   │   └── index.js
 │   └── package.json
 ├── server/                # Node.js backend
 │   ├── models/           # MongoDB models
+│   │   ├── QRCode.js
+│   │   └── Scan.js
 │   ├── routes/           # API routes
+│   │   ├── qrRoutes.js
+│   │   ├── scanRoutes.js
+│   │   └── analyticsRoutes.js
 │   ├── controllers/      # Route controllers
-│   ├── middleware/       # Custom middleware
+│   │   ├── qrController.js
+│   │   ├── scanController.js
+│   │   └── analyticsController.js
 │   └── index.js          # Server entry
 ├── .env.example
 ├── package.json
-└── README.md
+├── README.md
+├── API.md
+├── DEPLOYMENT.md
+└── FEATURES.md
 ```
 
-## License
+## 🔌 API Endpoints
 
-MIT
+### QR Codes
+- `POST /api/qr/generate` - Generate new QR code
+- `GET /api/qr/all` - Get all QR codes
+- `GET /api/qr/:id` - Get specific QR code
+- `PUT /api/qr/:id` - Update QR code
+- `DELETE /api/qr/:id` - Delete QR code
+
+### Analytics
+- `GET /api/analytics/dashboard` - Dashboard statistics
+- `GET /api/analytics/qr/:id` - QR-specific analytics
+
+### Scans
+- `GET /api/scan/:shortId` - Track scan & redirect
+- `GET /api/scan/qr/:id` - Get QR scan history
+
+See [API.md](API.md) for complete documentation.
+
+## 🎨 Screenshots
+
+### Dashboard
+Beautiful analytics dashboard with real-time updates, charts, and statistics.
+
+### QR Generator
+Simple interface to create QR codes with custom URLs and metadata.
+
+### QR Management
+Organized table view with search, sort, and filter capabilities.
+
+### Individual Analytics
+Detailed insights for each QR code with multiple visualization options.
+
+## 🔒 Security Features
+
+- ✅ Rate limiting (100 requests/15min)
+- ✅ Helmet security headers
+- ✅ CORS protection
+- ✅ Input validation
+- ✅ MongoDB injection prevention
+- ✅ XSS protection
+
+## 📱 Responsive Design
+
+Fully responsive design that works perfectly on:
+- 📱 Mobile devices
+- 📱 Tablets
+- 💻 Desktops
+- 🖥️ Large screens
+
+## 🚀 Deployment
+
+Deploy to your favorite platform:
+
+- **Heroku** - One-click deployment
+- **Vercel** (Frontend) + **Railway** (Backend)
+- **DigitalOcean** - Full control
+- **AWS/GCP/Azure** - Enterprise scale
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed guides.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- QRCode.js for QR generation
+- Chart.js for beautiful charts
+- Socket.io for real-time features
+- MongoDB for reliable data storage
+- React community for amazing tools
+
+## 📧 Contact
+
+**GitHub:** [@iakash07](https://github.com/iakash07)
+
+**Project Link:** [https://github.com/iakash07/qr-code-tracker](https://github.com/iakash07/qr-code-tracker)
+
+---
+
+⭐ **Star this repo** if you find it helpful!
+
+Built with ❤️ using MERN Stack
