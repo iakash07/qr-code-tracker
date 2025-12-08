@@ -8,11 +8,11 @@ router.post('/generate', qrController.generateQR);
 // Get all QR codes
 router.get('/all', qrController.getAllQRCodes);
 
+// Get QR code by short ID (must come before /:id to avoid conflicts)
+router.get('/short/:shortId', qrController.getQRByShortId);
+
 // Get single QR code by ID
 router.get('/:id', qrController.getQRCode);
-
-// Get QR code by short ID
-router.get('/short/:shortId', qrController.getQRByShortId);
 
 // Update QR code
 router.put('/:id', qrController.updateQRCode);
