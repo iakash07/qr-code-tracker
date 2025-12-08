@@ -9,23 +9,40 @@ class SocketService {
 
   connect() {
     if (!this.socket) {
+      console.log('🔌 Connecting to socket server:', SOCKET_URL);
+      
       this.socket = io(SOCKET_URL, {
-        transports: ['websocket'],
+        transports: ['websocket', 'polling'],
         reconnection: true,
         reconnectionDelay: 1000,
-        reconnectionAttempts: 5
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 10,
+        timeout: 20000
       });
 
       this.socket.on('connect', () => {
-        console.log('✅ Socket connected');
+        console.log('✅ Socket connected successfully - ID:', this.socket.id);
       });
 
-      this.socket.on('disconnect', () => {
-        console.log('❌ Socket disconnected');
+      this.socket.on('disconnect', (reason) => {
+        console.log('❌ Socket disconnected:', reason);
       });
 
       this.socket.on('connect_error', (error) => {
-        console.error('Socket connection error:', error);
+        console.error('❌ Socket connection error:', error.message);
+      });
+
+      this.socket.on('reconnect', (attemptNumber) => {
+        console.log('🔄 Socket reconnected after', attemptNumber, 'attempts');
+      });
+
+      this.socket.on('reconnect_attempt', (attemptNumber) => {
+        console.log('🔄 Attempting to reconnect...', attemptNumber);
+      });
+
+      // Listen for scan updates
+      this.socket.on('scan-update', (data) => {
+        console.log('📡 Received scan-update:', data);
       });
     }
     return this.socket;
@@ -33,6 +50,7 @@ class SocketService {
 
   disconnect() {
     if (this.socket) {
+      console.log('🔌 Disconnecting socket');
       this.socket.disconnect();
       this.socket = null;
     }
@@ -41,6 +59,8 @@ class SocketService {
   on(event, callback) {
     if (this.socket) {
       this.socket.on(event, callback);
+    } else {
+      console.warn('⚠️ Socket not connected. Call connect() first.');
     }
   }
 
@@ -51,9 +71,15 @@ class SocketService {
   }
 
   emit(event, data) {
-    if (this.socket) {
+    if (this.socket && this.socket.connected) {
       this.socket.emit(event, data);
+    } else {
+      console.warn('⚠️ Socket not connected. Cannot emit event:', event);
     }
+  }
+
+  isConnected() {
+    return this.socket && this.socket.connected;
   }
 }
 
