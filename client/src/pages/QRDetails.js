@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Line, Doughnut } from 'react-chartjs-2';
 import { FaEdit, FaSave, FaTimes, FaDownload, FaTrash } from 'react-icons/fa';
@@ -17,11 +17,7 @@ const QRDetails = () => {
   const [formData, setFormData] = useState({});
   const [period, setPeriod] = useState('30d');
 
-  useEffect(() => {
-    fetchData();
-  }, [id, period]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const [qrResponse, analyticsResponse] = await Promise.all([
@@ -37,7 +33,11 @@ const QRDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, period]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleUpdate = async () => {
     try {
