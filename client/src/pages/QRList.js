@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FaEdit, FaTrash, FaEye, FaSearch, FaDownload } from 'react-icons/fa';
+import { FaTrash, FaEye, FaSearch, FaDownload } from 'react-icons/fa';
 import { getAllQRCodes, deleteQRCode } from '../services/api';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
@@ -12,11 +12,7 @@ const QRList = () => {
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
-  useEffect(() => {
-    fetchQRCodes();
-  }, [search, pagination.page]);
-
-  const fetchQRCodes = async () => {
+  const fetchQRCodes = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getAllQRCodes({
@@ -32,7 +28,11 @@ const QRList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, pagination.page, pagination.limit]);
+
+  useEffect(() => {
+    fetchQRCodes();
+  }, [fetchQRCodes]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this QR code?')) {
