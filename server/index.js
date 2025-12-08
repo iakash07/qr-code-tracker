@@ -57,11 +57,8 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-tracker', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+// MongoDB Connection (removed deprecated options)
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-tracker')
 .then(() => console.log('✅ MongoDB Connected'))
 .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
