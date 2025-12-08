@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
@@ -35,6 +35,19 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('7d');
 
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await getDashboardStats({ period });
+      setStats(response.data.data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      toast.error('Failed to load dashboard stats');
+    } finally {
+      setLoading(false);
+    }
+  }, [period]);
+
   useEffect(() => {
     fetchStats();
     
@@ -51,20 +64,7 @@ const Dashboard = () => {
     return () => {
       socket.off('scan-update');
     };
-  }, [period]);
-
-  const fetchStats = async () => {
-    try {
-      setLoading(true);
-      const response = await getDashboardStats({ period });
-      setStats(response.data.data);
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-      toast.error('Failed to load dashboard stats');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchStats]);
 
   if (loading) {
     return <div className="loading">Loading dashboard...</div>;
