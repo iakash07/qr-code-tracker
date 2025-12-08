@@ -58,22 +58,35 @@ exports.trackScan = async (req, res) => {
 
     // Emit real-time update via Socket.io
     const io = req.app.get('io');
-    io.emit('scan-update', {
-      qrCodeId: qrCode._id,
-      shortId,
-      scanCount: qrCode.scanCount,
-      scan: {
-        timestamp: scan.timestamp,
-        deviceType: scan.deviceType,
-        country: scan.country,
-        city: scan.city
-      }
-    });
+    if (io) {
+      console.log('📡 Emitting scan-update event:', {
+        qrCodeId: qrCode._id.toString(),
+        shortId,
+        scanCount: qrCode.scanCount
+      });
+      
+      io.emit('scan-update', {
+        qrCodeId: qrCode._id.toString(),
+        shortId,
+        scanCount: qrCode.scanCount,
+        scan: {
+          timestamp: scan.timestamp,
+          deviceType: scan.deviceType,
+          country: scan.country,
+          city: scan.city,
+          browser: scan.browser,
+          os: scan.os
+        }
+      });
+    } else {
+      console.warn('⚠️ Socket.io not available for real-time updates');
+    }
 
     // Redirect to original URL
+    console.log(`✅ Redirecting to: ${qrCode.originalUrl}`);
     res.redirect(qrCode.originalUrl);
   } catch (error) {
-    console.error('Error tracking scan:', error);
+    console.error('❌ Error tracking scan:', error);
     res.status(500).send('Error processing scan');
   }
 };
