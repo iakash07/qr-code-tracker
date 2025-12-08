@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
+const path = require('path');
 require('dotenv').config();
 
 const qrRoutes = require('./routes/qrRoutes');
@@ -36,7 +37,7 @@ app.use('/api/', limiter);
 // Make io accessible to routes
 app.set('io', io);
 
-// Routes
+// API Routes
 app.use('/api/qr', qrRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/scan', scanRoutes);
@@ -45,6 +46,16 @@ app.use('/api/scan', scanRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
+
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-tracker', {
@@ -76,4 +87,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
