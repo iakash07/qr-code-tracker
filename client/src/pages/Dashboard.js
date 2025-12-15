@@ -38,10 +38,12 @@ const Dashboard = () => {
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
+      console.log('📊 Fetching dashboard stats...');
       const response = await getDashboardStats({ period });
       setStats(response.data.data);
+      console.log('✅ Dashboard stats loaded');
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('❌ Error fetching stats:', error);
       toast.error('Failed to load dashboard stats');
     } finally {
       setLoading(false);
@@ -49,19 +51,32 @@ const Dashboard = () => {
   }, [period]);
 
   useEffect(() => {
+    console.log('🎯 Dashboard mounted, initializing...');
     fetchStats();
     
     // Connect to socket for real-time updates
+    console.log('🔌 Connecting to socket for real-time updates...');
     const socket = socketService.connect();
     
+    // Check if socket is connected
+    if (socket.connected) {
+      console.log('✅ Socket already connected');
+    } else {
+      console.log('⏳ Waiting for socket connection...');
+    }
+    
     socket.on('scan-update', (data) => {
+      console.log('📡 Received scan-update event:', data);
       toast.info(`New scan detected! QR: ${data.shortId}`, {
-        position: 'bottom-right'
+        position: 'bottom-right',
+        autoClose: 3000
       });
+      console.log('🔄 Refreshing dashboard stats...');
       fetchStats(); // Refresh stats
     });
 
     return () => {
+      console.log('🔌 Cleaning up socket listeners');
       socket.off('scan-update');
     };
   }, [fetchStats]);
