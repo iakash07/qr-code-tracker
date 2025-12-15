@@ -37,27 +37,28 @@ app.use('/api/', limiter);
 // Make io accessible to routes
 app.set('io', io);
 
-// API Routes
-app.use('/api/qr', qrRoutes);
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/scan', scanRoutes);
-
-// Health check
+// Health check (before other routes)
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
+
+// API Routes - MUST come before static file serving
+app.use('/api/qr', qrRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/scan', scanRoutes);
 
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
   
-  // Handle React routing, return all requests to React app
+  // Handle React routing - this MUST be last
+  // It catches all routes that aren't API routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
 }
 
-// MongoDB Connection (removed deprecated options)
+// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-tracker')
 .then(() => console.log('✅ MongoDB Connected'))
 .catch(err => console.error('❌ MongoDB Connection Error:', err));
@@ -85,4 +86,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 API Routes: /api/qr, /api/analytics, /api/scan`);
 });
