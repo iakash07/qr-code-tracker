@@ -6,9 +6,17 @@ const ScanRedirect = () => {
   const { shortId } = useParams();
 
   useEffect(() => {
-    // Directly redirect to the backend scan endpoint
+    // Get the backend URL
+    const backendUrl = process.env.REACT_APP_API_URL 
+      ? process.env.REACT_APP_API_URL.replace('/api', '') 
+      : window.location.origin;
+    
+    // Redirect to the backend scan endpoint
     // The backend will track the scan and redirect to the destination URL
-    window.location.href = `/api/scan/${shortId}`;
+    const scanUrl = `${backendUrl}/api/scan/${shortId}`;
+    
+    console.log('🔄 Redirecting to scan endpoint:', scanUrl);
+    window.location.href = scanUrl;
   }, [shortId]);
 
   return (
